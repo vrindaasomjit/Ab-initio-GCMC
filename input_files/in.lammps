@@ -1,0 +1,67 @@
+# Al2O3_Al interface for use with VASP
+
+#initialization
+
+variable        mode index file
+
+if "${mode} == file" then &
+  "message client gcmc file tmp.couple" &
+elif "${mode} == zmq" &
+  "message client gcmc zmq localhost:5555" &
+
+variable        x index 1
+variable        y index 1
+variable        z index 1
+variable        mu_Al index -4.01 # chemical potential of Al
+variable	mu_O index -9.6476 #chemical potential of O
+variable        temp index 800
+variable        disp index 0.0
+variable	volume index 437.1134806854191 # effective region volume
+
+region          intf prism 0 9.89338684 0 8.56792433 5.7 20.32 4.94669342 0 0 units box
+
+units           metal
+atom_style      atomic
+atom_modify     sort 0 0.0 map yes
+
+# system definition
+
+boundary	p p p
+read_restart	data.in
+mass            1 26.981539
+mass		2 15.9999
+
+replicate       $x $y $z
+
+# simulation settings
+comm_modify	mode single cutoff 10.0
+#velocity       all create 300.0 87287 loop geom
+
+neighbor		0.3 bin
+neigh_modify	delay 0 every 1 check no
+
+group			O type 2
+
+fix             1 O client/gcmc 1 100 0 2 31782 ${temp} ${mu_O} ${disp} ${volume} region intf full_energy overlap_cutoff 1.0 
+
+# output
+
+variable	tattm equal f_1[1]
+variable        tsucc equal f_1[2]
+variable	iattm equal f_1[3]
+variable        isucc equal f_1[4]
+variable	dattm equal f_1[5]
+variable        dsucc equal f_1[6]
+
+#thermo_style    custom step temp press pe ke etotal density atoms v_iattm v_isucc v_dattm v_dsucc v_tattm v_tsucc v_rattm v_rsucc v_nH f_1
+
+thermo_style	custom step density atoms v_iattm v_isucc v_dattm v_dsucc v_tattm v_tsucc f_1 
+
+thermo          1
+
+#dump            Al_O_dump Al_O custom 1 dump_file.* id type x y z
+
+restart		1 gcmc.restart
+# run
+run             2000
+message         quit
