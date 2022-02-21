@@ -12,7 +12,6 @@ elif "${mode} == zmq" &
 variable        x index 1
 variable        y index 1
 variable        z index 1
-variable        mu_Al index -4.01 # chemical potential of Al
 variable	mu_O index -9.6476 #chemical potential of O
 variable        temp index 800
 variable        disp index 0.0
@@ -27,7 +26,7 @@ atom_modify     sort 0 0.0 map yes
 # system definition
 
 boundary	p p p
-read_restart	data.in
+read_data	data.in
 mass            1 26.981539
 mass		2 15.9999
 
