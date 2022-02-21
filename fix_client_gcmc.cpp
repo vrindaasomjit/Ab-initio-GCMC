@@ -1782,6 +1782,11 @@ void FixClientGCMC::attempt_atomic_deletion_full()
   double energy_before = energy_stored;
 
   int i = pick_random_gas_atom();
+
+  while (atom->type[i] != ngcmc_type){
+    int i = pick_random_gas_atom();
+  }
+    
   printf("i is %d\n", i+1);
   printf("type is %d\n", atom->type[i]);
 
