@@ -18,7 +18,7 @@
 /* ----------------------------------------------------------------------
    Notes: 
    - currently getting chemical potential and volume (if using effective volume) as input from user
-   - this fix can insert, delete, and translate only the one atom type specified in input file, but can be edited for > 1 atom type (see documentation)
+   - this fix can insert and delete only the one atom type specified in input file, but can be edited for > 1 atom type (see documentation); can translate any atom in fix group 
    - currently doing nmcmoves % translation, nexchange % insertion/deletion
    - MC moves of molecules, such as rotation, is not included
    - this fix works on only 1 processor
@@ -1781,24 +1781,37 @@ void FixClientGCMC::attempt_atomic_deletion_full()
 
   double energy_before = energy_stored;
 
-  int i = pick_random_gas_atom();
-
-  while (atom->type[i] != ngcmc_type){
-    int i = pick_random_gas_atom();
-  }
-    
-  printf("i is %d\n", i+1);
-  printf("type is %d\n", atom->type[i]);
-
   // computing number of atoms being exchanged from, of the particular type
 
   int count = 0;
   for (int a = 0; a < ngas; a++){
   	int b = local_gas_list[a];
-  	if (atom->type[b] == atom->type[i]){
+  	if (atom->type[b] == ngcmc_type){
   		count++;
   	}
   }
+
+  // creating list of atoms of exchange type, of length count
+
+  int j = 0;
+
+  int ngcmc_type_atoms_list[count];
+
+  for (int a = 0; a < ngas; a++){
+    int b = local_gas_list[a];
+    if (atom->type[b] == ngcmc_type){
+      ngcmc_type_atoms_list[j] = b;
+      j++;
+    }
+  }
+
+  // picking random gas atom from ngcmc_type_atoms_list
+
+  int ran_num = static_cast<int>(count*random_equal->uniform());
+  int i = ngcmc_type_atoms_list[ran_num];
+
+  printf("i is %d\n", i+1);
+  printf("type is %d\n", atom->type[i]);
 
   double **x = atom->x;
 
