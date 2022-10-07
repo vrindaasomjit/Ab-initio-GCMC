@@ -1,5 +1,5 @@
 # Ab-initio-GCMC
-This repository contains the code and example input files to carry out ab initio Grand Canonical Monte Carlo simulations using LAMMPS [1-3] and VASP [4-7]. Please read the documentation for thorough details about how the code works and how to use it. <br />
+This repository contains the code and example input files to carry out ab initio Grand Canonical Monte Carlo simulations using LAMMPS [1-3] and VASP [4-7]. Please read the documentation provided for thorough details about how the code works and how to use it. <br />
 If you use it, please consider citing our paper: V. Somjit and B. Yildiz, Atomic and Electronic Structure of the Al2O3/Al Interface during Oxide Propagation Probed by Ab Initio Grand Canonical Monte Carlo, ACS Appl. Mater. Interfaces 2022, 14, 37, 42613–42627).<br />
 [1] https://www.lammps.org<br />
 [2] LAMMPS - a flexible simulation tool for particle-based materials modeling at the atomic, meso, and continuum scales, A. P. Thompson, H. M. Aktulga, R. Berger, D. S. Bolintineanu, W. M. Brown, P. S. Crozier, P. J. in 't Veld, A. Kohlmeyer, S. G. Moore, T. D. Nguyen, R. Shan, M. J. Stevens, J. Tranchida, C. Trott, S. J. Plimpton, Comp Phys Comm, 271 (2022) 10817<br />
